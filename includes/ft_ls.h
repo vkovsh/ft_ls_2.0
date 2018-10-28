@@ -122,14 +122,14 @@ typedef struct			s_catalog
 typedef struct			s_ftls
 {
 	int					flags;
-	t_list				*arguments;
+	t_bintree			*arguments;
 	char				delimiter;
 	void				(*print_arg)(t_catalog *, char);
 	t_comproute			compare;
 	t_compoproute		compare_operator;
 }						t_ftls;
 
-int						set_catalog_from_arg(t_list **l,
+int						set_catalog_from_arg(t_bintree **b,
 						char *str);
 bool					operator_bigger(int a, int b);
 bool					operator_lesser(int a, int b);
@@ -143,7 +143,7 @@ void					bubblesort(t_list **l,
 void					get_args(int a,
 						char **args, t_ftls *ftls);
 void					parse_args(t_ftls *ftls,
-						t_list *l, int a);
+						t_bintree *b, int a);
 void					print_verbose_info(t_catalog *c,
 						char delim);
 void					print_info(t_catalog *c,

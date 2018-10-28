@@ -37,7 +37,7 @@ void			set_flags_from_arg(t_ftls *ftls, char *str)
 	}
 }
 
-int				set_catalog_from_arg(t_list **args, char *str)
+int				set_catalog_from_arg(t_bintree **args, char *str)
 {
 	t_catalog	tmp;
 
@@ -50,7 +50,9 @@ int				set_catalog_from_arg(t_list **args, char *str)
 		return (-1);
 	}
 	tmp.filetype = get_file_type(&tmp);
-	ft_lstadd(args, ft_lstnew(&tmp, sizeof(t_catalog)));
+	ft_bintree_add(args,
+		ft_bintree_new(tmp.name, ft_strlen(tmp.name) + 1, &tmp, sizeof(tmp)),
+		(t_compare_keys)ft_strcmp);
 	return (0);
 }
 

@@ -27,11 +27,11 @@ static void			del_catalog_entry(void *c, size_t size)
 }
 
 static void			extract_args_from_dirs(t_ftls *ftls,
-					t_list *dirs, int depth)
+					t_bintree *dirs, int depth)
 {
 	t_catalog		*catalog;
 	char			*name_buf;
-	t_list			*new_args;
+	t_bintree		*new_args;
 
 	while (dirs)
 	{
