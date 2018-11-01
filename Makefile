@@ -21,13 +21,9 @@ SRC_NAME			=	main.c					\
 						parse_args.c			\
 						print_verbose_info.c	\
 						print_info.c			\
-						is_flag_set.c			\
 						get_file_type.c			\
 						read_directory.c		\
-						is_system_dot_dir.c		\
-						sort.c					\
-						compare.c				\
-						ft_error.c
+						is_system_dot_dir.c
 
 all: $(NAME)
 

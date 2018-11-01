@@ -12,11 +12,11 @@
 
 #include "ft_ls.h"
 
-bool					bin(t_stat *s)
+bool					bin(size_t mode)
 {
-	return ((s->st_mode & S_IXUSR) |
-			(s->st_mode & S_IXGRP) |
-			(s->st_mode & S_IXOTH));
+	return ((mode & S_IXUSR) |
+			(mode & S_IXGRP) |
+			(mode & S_IXOTH));
 }
 
 void					get_permission_str(
@@ -30,7 +30,7 @@ void					get_permission_str(
 	perm[0] = FILE_TYPE_MARKERS[c->filetype];
 	i = 0;
 	while (++i <= PERM_TOTAL)
-		perm[i] = (c->clstat.st_mode & pm[i]) ?
+		perm[i] = (c->clstat->st_mode & pm[i]) ?
 			PERM_FULL[i] : '-';
 }
 
@@ -51,16 +51,16 @@ void					print_from_stat(t_catalog *c,
 	struct group		*gr;
 	char				*date;
 
-	date = ctime(&c->clstat.st_mtime);
-	pw = getpwuid(c->clstat.st_uid);
-	gr = getgrgid(c->clstat.st_gid);
+	date = ctime(&c->clstat->st_mtime);
+	pw = getpwuid(c->clstat->st_uid);
+	gr = getgrgid(c->clstat->st_gid);
 	get_permission_str(c, perm);
 	ft_printf("%-11s%d %s %s %d %.12s %[*]{*}s",
 			perm,
-			c->clstat.st_nlink,
+			c->clstat->st_nlink,
 			pw->pw_name,
 			gr->gr_name,
-			c->clstat.st_size,
+			c->clstat->st_size,
 			&date[4],
 			pair.bc,
 			pair.fc,
@@ -87,7 +87,7 @@ void					print_verbose_info(t_catalog *c,
 	}
 	else
 	{
-		if (c->filetype == REG_FILE && bin(&(c->clstat)))
+		if (c->filetype == REG_FILE && bin(c->clstat->st_mode))
 		{
 			print_from_stat(c, NULL,
 			(t_colorpair){.fc = 0xff0000});

@@ -22,7 +22,7 @@ t_filetype		get_file_type(t_catalog *c)
 		return (ERR);
 	else
 	{
-		type_mask = c->clstat.st_mode & S_IFMT;
+		type_mask = c->clstat->st_mode & S_IFMT;
 		result = ERR;
 		while (++result < FILE_TYPE_TOTAL)
 			if (type_mask == type_macro[result])

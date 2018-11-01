@@ -56,12 +56,16 @@
 # define CP_A {REG_PAIR, DIR_PAIR, CHR_PAIR, BLK_PAIR,
 # define COLOR_PAIRS CP_A FIFO_PAIR, LNK_PAIR, SOC_PAIR}
 # define FILE_TYPE_MARKERS "-dcbpls"
+# define IS_FLAG_SET(fs, f) ((fs) & (f))
+# define FT_ERROR(n)({ft_printf("ft_ls: %s\n", strerror(errno));})
+# define APPEND_IT(f,name)(name[0] != '.' || IS_FLAG_SET(f, LS_SMALL_A))
 
-typedef bool			(*t_comproute)(t_list *a,
-						t_list *b, void *op);
-typedef bool			(*t_compoproute)(int a, int b);
+extern int				g_depth;
+int						errno;
 typedef struct stat		t_stat;
 typedef struct dirent	t_dirent;
+typedef void			(*t_bintree_traverse)(t_bintree **t,
+						t_node_action action);
 
 typedef struct			s_colorpair
 {
@@ -113,8 +117,8 @@ typedef struct			s_catalog
 {
 	char				*name;
 	t_filetype			filetype;
-	t_stat				cstat;
-	t_stat				clstat;
+	t_stat				*cstat;
+	t_stat				*clstat;
 	int					stat_res;
 	int					lstat_res;
 }						t_catalog;
@@ -125,34 +129,20 @@ typedef struct			s_ftls
 	t_bintree			*arguments;
 	char				delimiter;
 	void				(*print_arg)(t_catalog *, char);
-	t_comproute			compare;
-	t_compoproute		compare_operator;
+	t_bintree_traverse	traverse;
 }						t_ftls;
+
+extern t_ftls			*g_ftls;
 
 int						set_catalog_from_arg(t_bintree **b,
 						char *str);
-bool					operator_bigger(int a, int b);
-bool					operator_lesser(int a, int b);
-bool					compare_case_insensitive(t_list *a,
-						t_list *b, void *op);
-bool					compare_by_mod_date(t_list *a,
-						t_list *b, void *op);
 bool					is_system_dot_dir(char *arg);
-void					bubblesort(t_list **l,
-						void *cmp, void *op);
-void					get_args(int a,
-						char **args, t_ftls *ftls);
-void					parse_args(t_ftls *ftls,
-						t_bintree *b, int a);
-void					print_verbose_info(t_catalog *c,
-						char delim);
-void					print_info(t_catalog *c,
-						char delim);
-bool					is_flag_set(int a, int b);
+void					get_args(int a, char **args);
+void					parse_args(t_bintree *b);
+void					print_verbose_info(t_catalog *c, char delim);
+void					print_info(t_catalog *c, char delim);
 t_filetype				get_file_type(t_catalog *c);
-t_list					*read_directory(const char *str,
-						t_ftls *ftls);
+t_bintree				*read_directory(const char *str);
 const char				*cut_name(const char *name);
-void					ft_error(const char *name);
 
 #endif

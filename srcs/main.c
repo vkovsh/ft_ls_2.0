@@ -12,58 +12,54 @@
 
 #include "ft_ls.h"
 
-void		set_delimiter(t_ftls *ftls)
+t_ftls	*g_ftls = NULL;
+
+void		set_delimiter(void)
 {
-	if (is_flag_set(ftls->flags, LS_ONE) ||
-		is_flag_set(ftls->flags, LS_SMALL_L))
-		ftls->delimiter = '\n';
+	if (IS_FLAG_SET(g_ftls->flags, LS_ONE) ||
+		IS_FLAG_SET(g_ftls->flags, LS_SMALL_L))
+		g_ftls->delimiter = '\n';
 	else
-		ftls->delimiter = ' ';
+		g_ftls->delimiter = ' ';
 }
 
-void		proceed_flags(t_ftls *ftls)
+void		proceed_flags(void)
 {
-	if (is_flag_set(ftls->flags, LS_BIG_U))
+	if (IS_FLAG_SET(g_ftls->flags, LS_BIG_U))
+		g_ftls->traverse = ft_bintree_prefix_traverse;
+	else if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_T))
 	{
-		ftls->compare = NULL;
-		ftls->compare_operator = NULL;
-	}
-	else if (is_flag_set(ftls->flags, LS_SMALL_T))
-	{
-		ftls->compare = compare_by_mod_date;
-		if (is_flag_set(ftls->flags, LS_SMALL_R))
-			ftls->compare_operator = operator_bigger;
+		if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_R))
+			g_ftls->traverse = ft_bintree_infix_traverse_reverse;
 		else
-			ftls->compare_operator = operator_lesser;
+			g_ftls->traverse = ft_bintree_infix_traverse;
 	}
 	else
 	{
-		ftls->compare = compare_case_insensitive;
-		if (is_flag_set(ftls->flags, LS_SMALL_R))
-			ftls->compare_operator = operator_lesser;
+		if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_R))
+			g_ftls->traverse = ft_bintree_infix_traverse_reverse;
 		else
-			ftls->compare_operator = operator_bigger;
+			g_ftls->traverse = ft_bintree_infix_traverse;
 	}
 }
 
-void		set_print_func(t_ftls *ftls)
+void		set_print_func(void)
 {
-	ftls->print_arg =
-		(is_flag_set(ftls->flags, LS_SMALL_L)) ?
+	g_ftls->print_arg =
+		(IS_FLAG_SET(g_ftls->flags, LS_SMALL_L)) ?
 		print_verbose_info : print_info;
 }
 
 int			main(int argc, char **argv)
 {
-	t_ftls	ftls;
+	static t_ftls	ftls;
 
+	g_ftls = &ftls;
 	ft_bzero(&ftls, sizeof(t_ftls));
-	get_args(argc, argv, &ftls);
-	set_print_func(&ftls);
-	set_delimiter(&ftls);
-	proceed_flags(&ftls);
-	parse_args(&ftls,
-		ftls.arguments,
-		is_flag_set(ftls.flags, LS_SMALL_D));
+	get_args(argc, argv);
+	set_print_func();
+	set_delimiter();
+	proceed_flags();
+	parse_args(g_ftls->arguments);
 	return (0);
 }

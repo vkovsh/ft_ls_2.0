@@ -12,18 +12,11 @@
 
 #include "ft_ls.h"
 
-static inline bool	append_it(int flags, const char *name)
-{
-	return (name[0] != '.' ||
-		is_flag_set(flags, LS_SMALL_A));
-}
-
-t_list				*read_directory(const char *dirname,
-					t_ftls *ftls)
+t_bintree			*read_directory(const char *dirname)
 {
 	DIR				*pdir;
 	t_dirent		*pdirent;
-	t_list			*dir_args;
+	t_bintree		*dir_args;
 	int				total;
 	t_catalog		*catalog;
 
@@ -33,16 +26,16 @@ t_list				*read_directory(const char *dirname,
 		return (dir_args);
 	while ((pdirent = readdir(pdir)) != NULL)
 	{
-		if (append_it(ftls->flags, pdirent->d_name))
+		if (APPEND_IT(g_ftls->flags, pdirent->d_name))
 		{
 			set_catalog_from_arg(&dir_args,
 				ft_strjoin_free(ft_strjoin(dirname, "/"),
 				pdirent->d_name, TRUE, FALSE));
-			catalog = (t_catalog *)(dir_args->content);
-			total += catalog->clstat.st_blocks;
+			catalog = (t_catalog *)(dir_args->value);
+			total += catalog->clstat->st_blocks;
 		}
 	}
-	if (is_flag_set(ftls->flags, LS_SMALL_L))
+	if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_L))
 		ft_printf("total %[*]{*}d\n", 0xff0000, 0xffff00, total);
 	closedir(pdir);
 	return (dir_args);

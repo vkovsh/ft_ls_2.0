@@ -47,3 +47,6 @@ void					ft_bintree_prefix_traverse(t_bintree **t,
 
 void					ft_bintree_postfix_traverse(t_bintree **t,
 						t_node_action action);
+
+void					ft_bintree_infix_traverse_reverse(t_bintree **t,
+						t_node_action action);
