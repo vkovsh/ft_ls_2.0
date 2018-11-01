@@ -42,9 +42,8 @@ int				set_catalog_from_arg(t_bintree **args, char *str)
 	t_catalog	tmp;
 
 	tmp.clstat = (t_stat *)malloc(sizeof(t_stat));
-	tmp.cstat = (t_stat *)malloc(sizeof(t_stat));
 	tmp.name = str;
-	tmp.stat_res = stat(tmp.name, tmp.cstat);
+	tmp.stat_res = stat(tmp.name, tmp.clstat);
 	if ((tmp.lstat_res = lstat(tmp.name, tmp.clstat)) < 0)
 	{
 		ft_printf("ft_ls: cannot access '%s'%s",
@@ -64,8 +63,8 @@ int				set_catalog_from_arg(t_bintree **args, char *str)
 			key = tmp.name;
 	}
 	ft_bintree_add(args,
-		ft_bintree_new(key, ft_strlen(key) + 1, &tmp, sizeof(tmp)),
-		(t_compare_keys)ft_strcmp);
+		ft_bintree_new(key, ft_strlen(key) + 1,
+			&tmp, sizeof(tmp)), ft_memcmp);
 	return (0);
 }
 

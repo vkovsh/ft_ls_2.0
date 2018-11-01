@@ -117,7 +117,6 @@ typedef struct			s_catalog
 {
 	char				*name;
 	t_filetype			filetype;
-	t_stat				*cstat;
 	t_stat				*clstat;
 	int					stat_res;
 	int					lstat_res;

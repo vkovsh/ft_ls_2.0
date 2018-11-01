@@ -26,7 +26,9 @@ void		set_delimiter(void)
 void		proceed_flags(void)
 {
 	if (IS_FLAG_SET(g_ftls->flags, LS_BIG_U))
-		g_ftls->traverse = ft_bintree_prefix_traverse;
+	{
+		g_ftls->traverse = ft_bintree_infix_traverse;
+	}
 	else if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_T))
 	{
 		if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_R))

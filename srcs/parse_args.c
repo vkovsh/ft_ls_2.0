@@ -24,6 +24,7 @@ static void			del_catalog_entry(void *key,
 
 	to_del = (t_catalog *)value;
 	ft_strdel(&(to_del->name));
+	ft_memdel((void **)&(to_del->clstat));
 	ft_memdel(&key);
 	ft_memdel(&value);
 	(void)key_size;
@@ -72,11 +73,18 @@ static void			extract_arg(void *key,
 	catalog = (t_catalog *)(value);
 	if (catalog->filetype == DIR_FILE)
 	{
-		ft_bintree_add(g_dirs,
-			ft_bintree_new(key, key_size,
-				value, value_size), ft_memcmp);
-		if (g_depth)
+		if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_D))
+		{
 			g_ftls->print_arg(catalog, g_ftls->delimiter);
+		}
+		else
+		{
+			ft_bintree_add(g_dirs,
+				ft_bintree_new(key, key_size,
+					value, value_size), ft_memcmp);
+			if (g_depth)
+				g_ftls->print_arg(catalog, g_ftls->delimiter);
+		}
 	}
 	else
 		g_ftls->print_arg(catalog, g_ftls->delimiter);
@@ -100,6 +108,7 @@ void				parse_args(t_bintree *args)
 		}
 		if (dirs)
 			ft_bintree_del(&dirs, del_catalog_entry);
-		//ft_bintree_del(&args, del_catalog_entry);
+		//if (args)
+		//	ft_bintree_del(&args, del_catalog_entry);
 	}
 }
