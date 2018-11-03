@@ -24,13 +24,15 @@ t_bintree			*read_directory(const char *dirname)
 	total = 0;
 	if ((pdir = opendir(dirname)) == NULL)
 		return (dir_args);
+	static int i = -1;
 	while ((pdirent = readdir(pdir)) != NULL)
 	{
 		if (APPEND_IT(g_ftls->flags, pdirent->d_name))
 		{
+			++i;
 			set_catalog_from_arg(&dir_args,
 				ft_strjoin_free(ft_strjoin(dirname, "/"),
-				pdirent->d_name, TRUE, FALSE));
+				pdirent->d_name, TRUE, FALSE), &i);
 			catalog = (t_catalog *)(dir_args->value);
 			total += catalog->clstat->st_blocks;
 		}

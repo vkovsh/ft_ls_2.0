@@ -1,4 +1,5 @@
 #include "libft.h"
+#include <stdio.h>
 
 void	ft_bintree_add(t_bintree **t,
 		t_bintree *node,
@@ -9,18 +10,11 @@ void	ft_bintree_add(t_bintree **t,
 	else
 	{
 		if (compare(node->key, (*t)->key, node->key_size) < 0)
-		{
-			if ((*t)->left)
-				ft_bintree_add(&((*t)->left), node, compare);
-			else
-				(*t)->left = node;
-		}
+			ft_bintree_add(&((*t)->left), node, compare);
 		else
-		{
-			if ((*t)->right)
-				ft_bintree_add(&((*t)->right), node, compare);
-			else
-				(*t)->right = node;
-		}
+			ft_bintree_add(&((*t)->right), node, compare);
+		//printf("[%d] -> ", (*t)->height);
+		//*t = ft_balance(*t);
+		//printf("[%d]\n", (*t)->height);
 	}
 }

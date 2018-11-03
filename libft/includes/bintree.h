@@ -1,8 +1,13 @@
-#include <sys/types.h>
-#include <stdlib.h>
+#ifndef BINTREE_H
+# define BINTREE_H
+# include <sys/types.h>
+# include <stdlib.h>
+# define HEIGHT(n)((n)?n->height:0)
+# define BFACTOR(n)(HEIGHT(n->right)-HEIGHT(n->left))
 
 typedef struct			s_bintree
 {
+	unsigned char		height;
 	void				*key;
 	size_t				key_size;
 	void				*value;
@@ -21,6 +26,14 @@ typedef void	(*t_node_action)(
 typedef void	(*t_del_node)(
 	void *key, size_t key_size,
 	void *value, size_t value_size);
+
+void					ft_fixheight(t_bintree *t);
+
+t_bintree				*ft_right_rotate(t_bintree *t);
+
+t_bintree				*ft_left_rotate(t_bintree *t);
+
+t_bintree				*ft_balance(t_bintree *p);
 
 void					ft_bintree_add(t_bintree **t,
 	t_bintree *node, t_compare_keys compare);
@@ -50,3 +63,4 @@ void					ft_bintree_postfix_traverse(t_bintree **t,
 
 void					ft_bintree_infix_traverse_reverse(t_bintree **t,
 						t_node_action action);
+#endif

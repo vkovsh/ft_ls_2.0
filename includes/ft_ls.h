@@ -20,6 +20,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/xattr.h>
 # include <pwd.h>
 # include <grp.h>
 # include <time.h>
@@ -32,9 +33,10 @@
 # define LS_ONE 32
 # define LS_BIG_U 64
 # define LS_SMALL_T 128
-# define FLAGS_ARRAY "lRard1Ut"
-# define PERM_FULL "-rwxrwxrwx"
-# define PERM_EMPTY "----------"
+# define LS_BIG_S 256
+# define LS_SMALL_I 512
+# define FLAGS_ARRAY "lRard1UtSi"
+# define PERM_FULL "-rwxrwxrwx"  
 # define HELP_TXT "Try './ft_ls --help' for more information.\n"
 # define PM_A {0,S_IRUSR,S_IWUSR,S_IXUSR,S_IRGRP,S_IWGRP,
 # define PM_B S_IXGRP,S_IROTH,S_IWOTH,S_IXOTH}
@@ -59,6 +61,7 @@
 # define IS_FLAG_SET(fs, f) ((fs) & (f))
 # define FT_ERROR(n)({ft_printf("ft_ls: %s\n", strerror(errno));})
 # define APPEND_IT(f,name)(name[0] != '.' || IS_FLAG_SET(f, LS_SMALL_A))
+# define IS_BIN(m)((m&S_IXUSR)|(m&S_IXGRP)|(m&S_IXOTH))
 
 extern int				g_depth;
 int						errno;
@@ -110,6 +113,8 @@ typedef enum			e_lsflag
 	LS_ONE_POS,
 	LS_BIG_U_POS,
 	LS_SMALL_T_POS,
+	LS_BIG_S_POS,
+	LS_SMALL_I_POS,
 	LS_FLAG_TOTAL
 }						t_lsflag;
 
@@ -124,6 +129,8 @@ typedef struct			s_catalog
 
 typedef struct			s_ftls
 {
+	uint8_t				nlink_width:4;
+	uint8_t				size_width:4;
 	int					flags;
 	t_bintree			*arguments;
 	char				delimiter;
@@ -134,7 +141,7 @@ typedef struct			s_ftls
 extern t_ftls			*g_ftls;
 
 int						set_catalog_from_arg(t_bintree **b,
-						char *str);
+						char *str, void *order);
 bool					is_system_dot_dir(char *arg);
 void					get_args(int a, char **args);
 void					parse_args(t_bintree *b);

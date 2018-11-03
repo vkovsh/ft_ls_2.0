@@ -148,7 +148,8 @@ LIBFT_BASE_NAME	=	ft_arealpha.c		\
 					ft_strstr.c			\
 					ft_isprint.c    	\
 					ft_strcat.c    		\
-					ft_strsub.c
+					ft_strsub.c			\
+					ft_nbrlen.c
 
 LIBFT_ASM_BASE_NAME 	=	ft_strlen.s
 
@@ -162,7 +163,10 @@ LIBFT_BINTREE_NAME	=	ft_bintree_del.c				\
 						ft_bintree_add.c				\
 						ft_bintree_prefix_traverse.c	\
 						ft_bintree_infix_traverse.c		\
-						ft_bintree_postfix_traverse.c
+						ft_bintree_postfix_traverse.c	\
+						ft_balance.c					\
+						ft_rotate.c						\
+						ft_fixheight.c		
 
 LIBFT_LIST_NAME	=		ft_lstadd.c			\
 						ft_lstcount.c		\

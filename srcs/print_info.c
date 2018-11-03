@@ -22,5 +22,7 @@ void					print_info(t_catalog *catalog,
 	name = ft_strrchr(catalog->name, '/');
 	name = (name) ? name + 1 : (char *)(catalog->name);
 	tmp = cp[catalog->filetype];
+	if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_I))
+		ft_printf("%zu ", catalog->clstat->st_ino);
 	ft_printf("%[*]{*}s%c", tmp.bc, tmp.fc, name, delim);
 }

@@ -20,5 +20,6 @@ t_bintree		*ft_bintree_new(const void *key,
 	bintree->key_size = key_size;
 	bintree->left = NULL;
 	bintree->right = NULL;
+	bintree->height = 1;
 	return (bintree);
 }
