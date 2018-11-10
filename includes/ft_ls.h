@@ -21,6 +21,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/xattr.h>
+# include <sys/sysmacros.h>
 # include <pwd.h>
 # include <grp.h>
 # include <time.h>
@@ -35,7 +36,8 @@
 # define LS_SMALL_T 128
 # define LS_BIG_S 256
 # define LS_SMALL_I 512
-# define FLAGS_ARRAY "lRard1UtSi"
+# define LS_SMALL_S 1024
+# define FLAGS_ARRAY "lRard1UtSis"
 # define PERM_FULL "-rwxrwxrwx"  
 # define HELP_TXT "Try './ft_ls --help' for more information.\n"
 # define PM_A {0,S_IRUSR,S_IWUSR,S_IXUSR,S_IRGRP,S_IWGRP,
@@ -69,6 +71,7 @@ typedef struct stat		t_stat;
 typedef struct dirent	t_dirent;
 typedef void			(*t_bintree_traverse)(t_bintree **t,
 						t_node_action action);
+typedef void			(*t_update_width)(void *c);
 
 typedef struct			s_colorpair
 {
@@ -115,6 +118,7 @@ typedef enum			e_lsflag
 	LS_SMALL_T_POS,
 	LS_BIG_S_POS,
 	LS_SMALL_I_POS,
+	LS_SMALL_S_POS,
 	LS_FLAG_TOTAL
 }						t_lsflag;
 
@@ -129,13 +133,19 @@ typedef struct			s_catalog
 
 typedef struct			s_ftls
 {
-	uint8_t				nlink_width:4;
-	uint8_t				size_width:4;
+	uint8_t				pw_name_width;
+	uint8_t				gr_name_width;
+	uint8_t				nlink_width;
+	uint8_t				size_width;
+	uint8_t				major_width;
+	uint8_t				minor_width;
 	int					flags;
 	t_bintree			*arguments;
 	char				delimiter;
 	void				(*print_arg)(t_catalog *, char);
 	t_bintree_traverse	traverse;
+	t_update_width		update_width_ptr;
+	t_compare_keys		compare_func_ptr;
 }						t_ftls;
 
 extern t_ftls			*g_ftls;
@@ -150,5 +160,6 @@ void					print_info(t_catalog *c, char delim);
 t_filetype				get_file_type(t_catalog *c);
 t_bintree				*read_directory(const char *str);
 const char				*cut_name(const char *name);
-
+void					update_field_width(void *ptr);
+int						comp_scalars(int64_t *a, int64_t *b);
 #endif

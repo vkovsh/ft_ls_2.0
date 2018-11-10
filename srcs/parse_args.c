@@ -105,8 +105,8 @@ void				parse_args(t_bintree *args)
 		if (IS_FLAG_SET(g_ftls->flags, LS_BIG_R) ||
 			g_depth == 0)
 		{
-			g_ftls->nlink_width = 0;
-			g_ftls->size_width = 0;
+			if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_L))
+				ft_bzero(g_ftls, 6);
 			if (!IS_FLAG_SET(g_ftls->flags, LS_SMALL_D))
 				g_ftls->traverse(&dirs, extract_arg_from_dirs);
 		}

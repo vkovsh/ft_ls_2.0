@@ -24,6 +24,9 @@ int			main(int argc, char **argv)
 	g_ftls->print_arg =
 		(IS_FLAG_SET(g_ftls->flags, LS_SMALL_L)) ?
 		print_verbose_info : print_info;
+	g_ftls->update_width_ptr =
+		(IS_FLAG_SET(g_ftls->flags, LS_SMALL_L)) ?
+		update_field_width : NULL;
 	if (IS_FLAG_SET(g_ftls->flags, LS_ONE) ||
 		IS_FLAG_SET(g_ftls->flags, LS_SMALL_L))
 		g_ftls->delimiter = '\n';
@@ -34,6 +37,15 @@ int			main(int argc, char **argv)
 		g_ftls->traverse = ft_bintree_infix_traverse_reverse;
 	else
 		g_ftls->traverse = ft_bintree_infix_traverse;
+
+	if (IS_FLAG_SET(g_ftls->flags, LS_BIG_U))
+		g_ftls->compare_func_ptr = ft_memcmp;
+	else if (IS_FLAG_SET(g_ftls->flags, LS_BIG_S))
+		g_ftls->compare_func_ptr = (t_compare_keys)comp_scalars;
+	else if (IS_FLAG_SET(g_ftls->flags, LS_SMALL_T))
+		g_ftls->compare_func_ptr = (t_compare_keys)comp_scalars;
+	else
+		g_ftls->compare_func_ptr = ft_memcmp;
 	parse_args(g_ftls->arguments);
 	return (0);
 }
