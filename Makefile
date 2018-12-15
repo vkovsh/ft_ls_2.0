@@ -1,14 +1,13 @@
 NAME				=	ft_ls
 
 CC					=	gcc
-CC_FLAGS			=	-Wall -Werror -Wextra -g
+CC_FLAGS			=	-Wall -Werror -Wextra
 
 SRC_PATH			=	./srcs/
 
-INC_PATH			=	./includes/ $(LIBFTPRINTF_PATH)includes/ $(LIBFT_PATH)includes/
+INC_PATH			=	./includes/ $(LIBFT_PATH)includes/
 OBJ_PATH			=	./obj/
-LIBFTPRINTF_PATH	=	./libft/
-LIBFT_PATH			=	$(LIBFTPRINTF_PATH)/libft/
+LIBFT_PATH			=	./libft/
 
 OBJ					=	$(addprefix $(OBJ_PATH),$(OBJ_NAME))
 
@@ -28,8 +27,8 @@ SRC_NAME			=	main.c					\
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@make -C $(LIBFTPRINTF_PATH)
-	@$(CC) -o $(NAME) $(OBJ) $(LIBFTPRINTF_PATH)libft.so
+	@make -C $(LIBFT_PATH) so
+	@$(CC) -o $(NAME) $(OBJ) $(LIBFT_PATH)libft.so
 	@echo "Compiling" [ $(NAME) ]
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
@@ -38,12 +37,12 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@echo "Linking" [ $< ]
 
 clean:
-	@make -C $(LIBFTPRINTF_PATH) clean
+	@make -C $(LIBFT_PATH) clean
 	@rm -rf $(OBJ_PATH)
 	@echo "Cleaning obj [ $(NAME) ]..."
 
 fclean: clean
-	@make -C $(LIBFTPRINTF_PATH) fclean
+	@make -C $(LIBFT_PATH) fclean
 	@rm -f $(NAME)
 	@echo "Remove [ $(NAME) ]..."
 

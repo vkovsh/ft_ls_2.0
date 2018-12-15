@@ -15,8 +15,6 @@ DYNAMIC_NAME		=	libft.so
 
 CC 					=	gcc
 CC_FLAGS 			=	-Wall -Werror -Wextra -fPIC
-NASM				=	nasm
-NASM_FLAGS			=	-f elf64
 
 INC_PATH			=	./includes/
 OBJ_PATH			=	./obj/
@@ -37,13 +35,10 @@ INC			=	$(addprefix -I, $(INC_PATH))
 
 OBJ_NAME	=	$(SRC_NAME:.c=.o)
 OBJ_NAME	+=	$(LIBFT_BASE_NAME:.c=.o)
-OBJ_NAME	+=	$(LIBFT_ASM_BASE_NAME:.s=.o)
-OBJ_NAME	+=	$(LIBFT_NASM_BASE_NAME:.asm=.o)
 OBJ_NAME	+=	$(LIBFT_BINTREE_NAME:.c=.o)
 OBJ_NAME	+=	$(LIBFT_LIST_NAME:.c=.o)
 OBJ_NAME	+=	$(LIBFT_STREAM_NAME:.c=.o)
 OBJ_NAME    +=  $(MACRO_NAME:.c=.o)
-
 OBJ_NAME    +=  $(PARSER_NAME:.c=.o)
 
 PARSER_NAME =   parse_specs.c						\
@@ -149,12 +144,9 @@ LIBFT_BASE_NAME	=	ft_arealpha.c		\
 					ft_isprint.c    	\
 					ft_strcat.c    		\
 					ft_strsub.c			\
-					ft_nbrlen.c
-
-LIBFT_ASM_BASE_NAME 	=	ft_strlen.s
-
-LIBFT_NASM_BASE_NAME	=	ft_strlen.asm	\
-							ft_memcpy.asm
+					ft_nbrlen.c			\
+					ft_strlen.c			\
+					ft_memcpy.c
 
 LIBFT_BINTREE_NAME	=	ft_bintree_del.c				\
 						ft_bintree_delone.c				\
@@ -187,9 +179,11 @@ LIBFT_STREAM_NAME	=	ft_putchar.c		\
 						ft_putstr_fd.c		\
 						get_next_line.c
 
-all: $(STATIC_NAME) so
+all: a so
 
 so: $(DYNAMIC_NAME)
+
+a: $(STATIC_NAME)
 
 $(DYNAMIC_NAME): $(OBJ)
 	@$(CC) -shared -o $@ $^
@@ -208,16 +202,6 @@ $(OBJ_PATH)%.o: $(LIBFT_PRINTF_PATH)%.c
 $(OBJ_PATH)%.o: $(LIBFT_BASE_PATH)%.c
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
-	@echo "Linking" [ $< ]
-
-#$(OBJ_PATH)%.o: $(LIBFT_BASE_PATH)%.s
-#	@mkdir -p $(OBJ_PATH)
-#	@$(CC) $(CC_FLAGS) -o $@ -c $< $(INC)
-#	@echo "Linking" [ $< ]
-
-$(OBJ_PATH)%.o: $(LIBFT_BASE_PATH)%.asm
-	@mkdir -p $(OBJ_PATH)
-	@$(NASM) $(NASM_FLAGS) -o $@ $< $(INC)
 	@echo "Linking" [ $< ]
 
 $(OBJ_PATH)%.o: $(LIBFT_BINTREE_PATH)%.c
